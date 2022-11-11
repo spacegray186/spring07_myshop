@@ -18,8 +18,30 @@ public class ProductDAO {
 	@Autowired
 	SqlSession sqlSession;
 	
+	
 	public List<Map<String, Object>> list() {
 		return sqlSession.selectList("product.list");
 	}//list() end
+	
+	public void insert(Map<String, Object> map) {
+		sqlSession.insert("product.insert", map);
+	}//insert() end
+	
+	public List<Map<String, Object>> search(String product_name){
+		
+		//영문자일 경우 대소문자 구분없이
+		//return sqlSession.selectList("product.search", "%" + product_name.toUpperCase() + "%");
+		
+		return sqlSession.selectList("product.search", "%" + product_name + "%");
+	}//search() end
+	
+	public Map<String, Object> detail(String product_code){
+		return sqlSession.selectOne("product.detail", product_code);
+	}//detail() end
+	
+	public void update(Map<String, Object> map) {
+		sqlSession.update("product.update", map);
+	}//update() end
+	
 	
 }//class end
