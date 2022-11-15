@@ -19,12 +19,21 @@ public class CommentDAO {
 	
 	public int commentInsert(CommentDTO comment) {
 		return sqlSession.insert("comment.insert", comment);
-	}//commentInsert() end
+	}//insert() end
 	
 	
-	public List<CommentDTO> commentlist(int pno){
+	public List<CommentDTO> commentlist(int pno) {
 		return sqlSession.selectList("comment.list", pno);
-	}//commentlist() end
+	}//list() end
 	
+	
+	public int commentUpdate(CommentDTO comment) {
+		return sqlSession.update("comment.update", comment);
+	}//update() end
+	
+	
+	public int commentDelete(int cno) throws Exception {
+		return sqlSession.delete("comment.delete", cno);
+	}//delete() end
 	
 }//class end
