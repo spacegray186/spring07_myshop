@@ -40,4 +40,15 @@
 		WHERE product_code=#{product_code}
 	</update>
 	
+	<select id="filename" resultType="String">
+		SELECT filename
+		FROM product
+		WHERE product_code=#{product_code}
+	</select>
+	
+	<delete id="delete">
+		DELETE FROM product
+		WHERE product_code=#{product_code}
+	</delete>
+	
 </mapper>
