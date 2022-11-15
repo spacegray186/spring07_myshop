@@ -125,4 +125,20 @@ public class ProductCont {
 		return "redirect:/product/list";
 	}//update() end
 	
+	@RequestMapping("/delete")
+	public String delete(int product_code, HttpServletRequest req) {
+		String filename=productDao.filename(product_code);	//파일삭제
+		if(filename != null && !filename.equals("-")) {
+			ServletContext application=req.getSession().getServletContext();
+			String path=application.getRealPath("/storage");
+			File file=new File(path + "\\" + filename);
+			if(file.exists()) {
+				file.delete();
+			}//if end
+		}//if end
+		productDao.delete(product_code);	//행삭제
+		return "redirect:/product/list";
+	}//delete() end
+	
+	
 }//class end
