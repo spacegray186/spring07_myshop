@@ -14,6 +14,17 @@
 		WHERE pno=#{pno}
 	</select>
 	
+	<update id="update" parameterType="kr.co.itwill.comment.CommentDTO">
+		UPDATE pcomment
+		SET content=#{content}
+		WHERE cno=#{cno}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM pcomment
+		WHERE cno=#{cno}
+	</delete>
+	
 	
 </mapper>
 
