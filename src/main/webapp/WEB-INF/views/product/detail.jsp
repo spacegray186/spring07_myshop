@@ -9,7 +9,7 @@
 	<script src="/js/jquery-3.6.1.min.js"></script>
 	<link href="/css/main.css" rel="stylesheet" type="text/css">
 	<script>
-		function product_update(){
+		function product_update(){	// ※ 주의사항 : 상품수정시 반드시 파일을 추가해야 함
 			document.form1.action="/product/update";
 			document.form1.submit();
 		}//product_update() end
@@ -20,11 +20,7 @@
 				document.form1.submit();
 			}//if end
 		}//product_delete() end
-		
-		function product_update(){
-			document.form1.action="/product/update";
-			document.form1.submit();
-		}//product_update() end
+				
 	</script>
 </head>
 <body>
@@ -122,43 +118,83 @@
 					,type:'get'
 					,data:{'pno':pno}	//부모글번호
 					,success:function(data){
-						//alert(data);
-						
-						//let a='';
+						//alert(data);						
+						let a='';	//출력할 결과값
 						$.each(data, function(key, value){
-							alert(key);		//순서 0 1 2
-							alert(value);		//[object Object]
-							alert(value.cno);
-							alert(value.pno);
-							alert(value.content);
-							alert(value.wname);
-							alert(value.regdate);
-							
-							/*
+							//alert(key);		//순서 0 1 2
+							//alert(value);		//[object Object]
+							//alert(value.cno);
+							//alert(value.pno);
+							//alert(value.content);
+							//alert(value.wname);
+							//alert(value.regdate);
 							a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom:15px;">';
 							a += '	<div class="commentInfo' + value.cno + '">';
-							a += '		댓글번호 : ' + value.cno + ' / 작성자 : ' + value.wname + " " + value.pno;
-							a += '		<a href="javascript:commentUpdate(' + value.cno + ',\'' + value.content + '\');">수정</a>';
-							a += '		<a href="javascript:commentDelete(' + value.cno + ');">삭제</a>';
+							a += '		댓글번호 : ' + value.cno + ' / 작성자 : ' + value.wname + " " + value.regdate;
+							a += '		<a href="javascript:commentUpdate(' + value.cno + ', \'' + value.content + '\');">[수정]</a>';
+							a += '		<a href="javascript:commentDelete(' + value.cno + ');">[삭제]</a>';
 							a += '	</div>';
 							a += '	<div class="commentContent' + value.cno + '">';
 							a += '		<p>내용 : ' + value.content + '</p>';
 							a += '	</div>';
 							a += '</div>';
-							*/
 						});	//each() end
 						
-						//$(".commentList").html(a);
+						$(".commentList").html(a);
+						
 					}//success end
 			});//ajax() end
 		}//commentList() end
 		
 		
+		//댓글 수정 - 댓글 내용 출력을 input 폼으로 변경
+		function commentUpdate(cno, content){
+			let a='';
+			a += '<div class="input-group">';
+			a += '	<input type="text" value="' + content +'" id="content_' + cno + '">';
+			a += '	<button type="button" onclick="commentUpdateProc(' + cno + ')">수정</button>';
+			a += '</div>';
+			
+			$('.commentContent' + cno).html(a);
+		}//commentUpdate() end
+		
+		
+		//댓글 수정
+		function commentUpdateProc(cno){
+			
+			let updateContent=$('#content_' + cno).val();
+			//alert(cno);
+			//alert(updateContent);
+			
+			$.ajax({
+					url:'/comment/update'
+					,type:'post'
+					,data:{'content':updateContent, 'cno':cno}
+					,success:function(data){
+						if(data==1) commentList();	//댓글 수정후 목록 출력
+					}
+			});//ajax() end
+		}//commentUpdateProc() end
+		
+		
+		//댓글삭제
+		function commentDelete(cno){
+			$.ajax({
+					 url:'/comment/delete/' + cno
+					,type:'post'
+					,success:function(data){
+						if(data==1){
+							commentList();	//댓글 삭제후 목록 출력
+						}//if end
+					}//success end
+			});//ajax() end
+		}//commentDelete() end
+		
+		
 		$(document).ready(function(){	//페이지 로딩시 댓글 목록 출력
 			commentList();
 		});//ready() end
-		
-		
+				
 	</script>
 	
 </body>
